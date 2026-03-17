@@ -202,3 +202,155 @@
       -2.6em 0em 0 0em rgba(255, 255, 255, 0.7), -1.8em -1.8em 0 0em #ffffff;
   }
 }
+/* ============================= */
+/* CYBERPUNK SKILL MATRIX STYLE */
+/* ============================= */
+
+/* Cyber grid background */
+
+.cyber-grid {
+  background-image:
+    linear-gradient(rgba(0,255,255,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,255,0.05) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* HUD panel container */
+
+.hud-panel{
+  position: relative;
+  border-radius: 20px;
+  border: 1px solid rgba(0,255,255,0.3);
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(8px);
+
+  box-shadow:
+    0 0 40px rgba(0,255,255,0.15),
+    inset 0 0 20px rgba(0,255,255,0.05);
+}
+
+/* glowing corner frame */
+
+.hud-panel::before,
+.hud-panel::after{
+  content:"";
+  position:absolute;
+  width:40px;
+  height:40px;
+  border:2px solid #00ffff;
+}
+
+.hud-panel::before{
+  top:-2px;
+  left:-2px;
+  border-right:none;
+  border-bottom:none;
+}
+
+.hud-panel::after{
+  bottom:-2px;
+  right:-2px;
+  border-left:none;
+  border-top:none;
+}
+
+/* futuristic neon title */
+
+.cyber-title{
+  color:#00ffff;
+  letter-spacing:0.3em;
+
+  text-shadow:
+    0 0 5px #00ffff,
+    0 0 10px #00ffff,
+    0 0 20px #00ffff;
+}
+
+/* rotating radar ring */
+
+@keyframes spinSlow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spinSlow 14s linear infinite;
+}
+
+
+/* radar scan beam */
+
+.radar-beam {
+
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+  background: conic-gradient(
+    from 0deg,
+    rgba(0,255,255,0.0) 0deg,
+    rgba(0,255,255,0.0) 250deg,
+    rgba(0,255,255,0.35) 300deg,
+    rgba(0,255,255,0.0) 360deg
+  );
+
+  animation: radarSweep 6s linear infinite;
+}
+
+@keyframes radarSweep {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* SOCIAL ICON CYBERPUNK STYLE */
+
+.social-btn {
+  width: 55px;
+  height: 55px;
+  border-radius: 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(8px);
+
+  border: 1px solid rgba(255,255,255,0.15);
+
+  transition: all 0.35s ease;
+
+  box-shadow:
+    inset 0 0 10px rgba(255,255,255,0.05),
+    0 0 10px rgba(0,255,255,0.08);
+}
+
+.social-btn img {
+  width: 24px;
+  height: 24px;
+  opacity: 0.9;
+}
+
+.social-btn:hover {
+  transform: translateY(-4px) scale(1.1);
+
+  border: 1px solid #00ffff;
+
+  box-shadow:
+    0 0 10px #00ffff,
+    0 0 20px rgba(0,255,255,0.5),
+    inset 0 0 8px rgba(0,255,255,0.2);
+}
+
+
+canvas {
+  filter: drop-shadow(0 0 6px rgba(0,255,255,0.3));
+}
