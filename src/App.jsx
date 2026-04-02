@@ -1,10 +1,12 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import { BrowserRouter } from "react-router-dom";
 
 import { About, Contact, Experience, Hero, Navbar, Tech, Works } from "./components";
 import SkillMatrix from "./components/SkillMatrix";
-import { StarsCanvas } from "./components/canvas";
 import Footer from "./components/Footer";
+
+// Lazy load heavy 3D components
+const StarsCanvas = lazy(() => import("./components/canvas/Stars"));
 
 const App = () => {
   return (
@@ -19,7 +21,9 @@ const App = () => {
         <Works />
         <Contact />
         <Footer />
-        <StarsCanvas />
+        <Suspense fallback={null}>
+          <StarsCanvas />
+        </Suspense>
       </div>
     </BrowserRouter>
   );

@@ -1,0 +1,126 @@
+diff --git a/src/App.jsx b/src/App.jsx
+index dcd882f..54b1972 100644
+--- a/src/App.jsx
++++ b/src/App.jsx
+@@ -1,11 +1,13 @@
+-import React from "react";
++import React, { lazy, Suspense } from "react";
+ import { BrowserRouter } from "react-router-dom";
+ 
+ import { About, Contact, Experience, Hero, Navbar, Tech, Works } from "./components";
+ import SkillMatrix from "./components/SkillMatrix";
+-import { StarsCanvas } from "./components/canvas";
+ import Footer from "./components/Footer";
+ 
++// Lazy load heavy 3D components
++const StarsCanvas = lazy(() => import("./components/canvas/Stars"));
++
+ const App = () => {
+   return (
+     <BrowserRouter>
+@@ -19,7 +21,9 @@ const App = () => {
+         <Works />
+         <Contact />
+         <Footer />
+-        <StarsCanvas />
++        <Suspense fallback={null}>
++          <StarsCanvas />
++        </Suspense>
+       </div>
+     </BrowserRouter>
+   );
+diff --git a/src/components/Works.jsx b/src/components/Works.jsx
+index ba072b4..be82cbf 100644
+--- a/src/components/Works.jsx
++++ b/src/components/Works.jsx
+@@ -20,9 +20,9 @@ const ProjectCard = ({
+     <motion.div variants={fadeIn("up", "spring", index * 0.5, 0.75)}>
+       <Tilt
+         options={{
+-          max: 45,
++          max: 15,
+           scale: 1,
+-          speed: 450,
++          speed: 300,
+         }}
+         className='bg-tertiary p-5 rounded-2xl sm:w-[360px] w-full'
+       >
+diff --git a/src/components/canvas/Ball.jsx b/src/components/canvas/Ball.jsx
+index e247136..39efdcc 100644
+--- a/src/components/canvas/Ball.jsx
++++ b/src/components/canvas/Ball.jsx
+@@ -41,8 +41,8 @@ const BallCanvas = ({ icon }) => {
+   return (
+     <Canvas
+       frameloop='demand'
+-      dpr={[1, 2]}
+-      gl={{ preserveDrawingBuffer: true }}
++      dpr={[1, 1.5]}
++      gl={{ preserveDrawingBuffer: true, powerPreference: "high-performance" }}
+     >
+       <Suspense fallback={<CanvasLoader />}>
+         <OrbitControls enableZoom={false} />
+diff --git a/src/components/canvas/Computers.jsx b/src/components/canvas/Computers.jsx
+index ff2180b..371215a 100644
+--- a/src/components/canvas/Computers.jsx
++++ b/src/components/canvas/Computers.jsx
+@@ -53,11 +53,11 @@ const ComputersCanvas = () => {
+ 
+   return (
+     <Canvas
+-      frameloop="always"
++      frameloop="demand"
+       shadows
+-      dpr={[1, 2]}
++      dpr={[1, 1.5]}
+       camera={{ position: [20, 3, 5], fov: 25 }}
+-      gl={{ preserveDrawingBuffer: true }}
++      gl={{ preserveDrawingBuffer: true, powerPreference: "high-performance" }}
+     >
+       <Suspense fallback={<CanvasLoader />}>
+ 
+diff --git a/src/components/canvas/Stars.jsx b/src/components/canvas/Stars.jsx
+index f37217e..c9dd910 100644
+--- a/src/components/canvas/Stars.jsx
++++ b/src/components/canvas/Stars.jsx
+@@ -5,11 +5,11 @@ import * as random from "maath/random/dist/maath-random.esm";
+ 
+ const Stars = (props) => {
+   const ref = useRef();
+-  const [sphere] = useState(() => random.inSphere(new Float32Array(5000), { radius: 1.2 }));
++  const [sphere] = useState(() => random.inSphere(new Float32Array(3000), { radius: 1.2 }));
+ 
+   useFrame((state, delta) => {
+-    ref.current.rotation.x -= delta / 10;
+-    ref.current.rotation.y -= delta / 15;
++    ref.current.rotation.x -= delta / 15;
++    ref.current.rotation.y -= delta / 20;
+   });
+ 
+   return (
+@@ -30,7 +30,11 @@ const Stars = (props) => {
+ const StarsCanvas = () => {
+   return (
+     <div className='w-full h-auto absolute inset-0 z-[-1]'>
+-      <Canvas camera={{ position: [0, 0, 1] }}>
++      <Canvas 
++        camera={{ position: [0, 0, 1] }}
++        dpr={[1, 1.5]}
++        gl={{ powerPreference: "high-performance" }}
++      >
+         <Suspense fallback={null}>
+           <Stars />
+         </Suspense>
+diff --git a/src/utils/motion.js b/src/utils/motion.js
+index 9e3828e..15beb8a 100644
+--- a/src/utils/motion.js
++++ b/src/utils/motion.js
+@@ -9,7 +9,7 @@ export const textVariant = (delay) => {
+       opacity: 1,
+       transition: {
+         type: "spring",
+-        duration: 1.25,
++        duration: 0.8,
+         delay: delay,
+       },
+     },
